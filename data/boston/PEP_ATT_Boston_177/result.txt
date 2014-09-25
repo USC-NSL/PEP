@@ -1,3 +1,0 @@
-Redirection:
-Content Rewriting:
-Caching:
