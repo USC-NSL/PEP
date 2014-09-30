@@ -2,7 +2,8 @@
 import httplib, os, string, random, time, socket, subprocess
 from multiprocessing import Process
 
-SERVER = '128.125.121.204'
+SERVER = '68.181.99.224'
+SERVERS_FOR_COMPARISON = ['207.238.252.78', '207.238.252.79', 'www.usc.edu', 'www.nytimes.com', '68.181.99.224']
 
 def fprint(s):
 	f_out.write(s + "\r\n")
@@ -28,7 +29,7 @@ def hand_shake(dest):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect((dest, 80))
 	time.sleep(1)
-	s.send("GET /non_exist_file_")
+	s.send("GET /non_exist_file_" + dest)
 	s.close()
 	
 def request(ip=SERVER, hostname="", fileobject="", saveto="temp", extra_headers=None):
@@ -70,7 +71,8 @@ def test():
 				ips[l[ss + 1:s] + "googlevideo.com"] = 0
 	start_tcpdump(label + "/youtube.pcap")
 	time.sleep(3)
-	hand_shake(SERVER)
+	for ip in SERVERS_FOR_COMPARISON:
+		hand_shake(ip)
 	for ip in ips:
 		print ip
 		hand_shake(ip)
