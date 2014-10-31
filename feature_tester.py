@@ -1,7 +1,7 @@
 # PEP
 import httplib, os, string, random, time, socket
 
-SERVER = "128.125.121.204"
+SERVER = "68.181.99.224"
 
 def fprint(s):
 	f_out.write(s + "\r\n")
@@ -9,12 +9,13 @@ def fprint(s):
 
 # start to log TCP traces on |SERVER|, with filename |logfile|
 def start_tcpdump(logfile):
-	request(SERVER + ":9999", fileobject="tcpdump?start&" + logfile)
+	request(SERVER + ":9998", fileobject="tcpdump?start&" + logfile)
 	return
 
 # stop to log TCP traces |logfile|, and scp |logfile| from |SERVER| to local |local_filename|
 def stop_tcpdump(logfile):
-	request(SERVER + ":9999", fileobject="tcpdump?stop&" + logfile)
+	time.sleep(1)
+	request(SERVER + ":9998", fileobject="tcpdump?stop&" + logfile)
 	time.sleep(2)
 	os.system("wget " + SERVER + "/PEP/" + logfile + " -q -O " + label + "/" + logfile)
 	if os.path.getsize(label + "/" + logfile) == 0:
@@ -47,7 +48,8 @@ def test_connection_persistence():
 # testing whether downloaded html is from our server, or carrier-choosed "www.cnn.com"
 def test_redirection():
 	fprint("Redirection:")
-	request(hostname="www.cnn.com", saveto=label + "/redirection")
+	#request(hostname="www.cnn.com", fileobject="aaabbbccc.html", saveto=label + "/redirection")
+	request(hostname="www.cnn.com", fileobject="/", saveto=label + "/redirection")
 	if open(label + "/redirection").read() != "Fake!!!\n":
 		fprint("\tredirecting!")
 
